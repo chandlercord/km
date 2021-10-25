@@ -413,6 +413,7 @@ jobs:
       uses: actions/checkout@v1  
       with:
         repository: opencontainers/runc
+        ref: "v1.0.2"
 
     - name: Setup tmate session
       uses: mxschmitt/action-tmate@v3
@@ -420,7 +421,6 @@ jobs:
     - name: Install runc
       run: |
         cd runc
-        git checkout v1.0.2
         make
 
   minikube-test:
