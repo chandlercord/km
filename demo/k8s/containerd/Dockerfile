@@ -3,7 +3,7 @@
 FROM fedora:33
 
 RUN dnf update -y
-
+RUN dnf install libseccomp -y
 RUN dnf install -y file procps strace pigz yajl libseccomp
 
 COPY bin/* /usr/local/bin/
