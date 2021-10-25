@@ -406,21 +406,23 @@ jobs:
 #          icon_emoji: ":thumbsdown:"
 
   containerd-setup:
-    # - name: Krun test prepartion - download km artifact
+    name: Containerd test setup
+    runs-on: ubuntu-20.04
+    steps:
+    # - name: Download km artifact
     #     uses: actions/download-artifact@v2
     #     with:
     #       name: km
     #       path: /opt/kontain/bin/
     #   - run: chmod a+x /opt/kontain/bin/km # download-artifact@v2 does not retain file mode
-
     - name: Install runc
-        uses: actions/checkout@v2
-        with:
-          repository: https://github.com/opencontainers/runc
-        run: |
-          cd containerd
-          git checkout v1.5.5
-          make
+    - uses: actions/checkout@v2
+      with:
+        repository: https://github.com/opencontainers/runc
+      run: |
+        cd containerd
+        git checkout v1.5.5
+        make
 
   minikube-test:
     name: Run k8s test on top of minikube
