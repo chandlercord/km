@@ -405,8 +405,8 @@ jobs:
 #          name: "CI workflow status"
 #          icon_emoji: ":thumbsdown:"
 
-  containerd-setup:
-    name: Containerd test setup
+  runc-setup:
+    name: Runc test setup
     runs-on: ubuntu-20.04
     steps:
     - name: Get runc
@@ -415,12 +415,24 @@ jobs:
         repository: opencontainers/runc
         ref: "v1.0.2"
 
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-
     - name: Install runc
       run: |
-        cd runc
+        cd ../runc
+        make
+
+  containerd-setup:
+    name: Containerd test setup
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Get containerd
+      uses: actions/checkout@v1  
+      with:
+        repository: containerd/containerd
+        ref: "v1.5.5"
+
+    - name: Install containerd
+      run: |
+        cd ../containerd
         make
 
   minikube-test:
