@@ -417,6 +417,7 @@ jobs:
 
     - name: Install runc
       run: |
+        apt-get install libseccomp
         cd ../runc
         make
 
@@ -432,6 +433,7 @@ jobs:
 
     - name: Install containerd
       run: |
+        apt-get install -y btrfs-progs
         cd ../containerd
         make
 
