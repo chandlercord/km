@@ -409,14 +409,8 @@ jobs:
     name: Containerd test setup
     runs-on: ubuntu-20.04
     steps:
-    # - name: Download km artifact
-    #     uses: actions/download-artifact@v2
-    #     with:
-    #       name: km
-    #       path: /opt/kontain/bin/
-    #   - run: chmod a+x /opt/kontain/bin/km # download-artifact@v2 does not retain file mode
     - name: Get runc
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
       with:
         repository: https://github.com/opencontainers/runc
     - name: Install runc
