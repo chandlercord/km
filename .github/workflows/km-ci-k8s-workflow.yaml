@@ -415,10 +415,11 @@ jobs:
     #       name: km
     #       path: /opt/kontain/bin/
     #   - run: chmod a+x /opt/kontain/bin/km # download-artifact@v2 does not retain file mode
-    - name: Install runc
+    - name: Get runc
     - uses: actions/checkout@v2
       with:
         repository: https://github.com/opencontainers/runc
+    - name: Install runc
       run: |
         cd containerd
         git checkout v1.5.5
