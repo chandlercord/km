@@ -410,9 +410,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: Get runc
-      uses: actions/checkout@v2
-      with:
-        repository: opencontainers/runc
+      run: |
+        git clone git@github.com:containerd/containerd.git
     - name: Setup tmate session
       uses: mxschmitt/action-tmate@v3
     - name: Install runc
