@@ -406,7 +406,7 @@ jobs:
 #          icon_emoji: ":thumbsdown:"
 
   runc-setup:
-    name: Runc test setup
+    name: Runc setup
     runs-on: ubuntu-20.04
     steps:
     - name: Get runc
@@ -422,7 +422,7 @@ jobs:
         make
 
   containerd-setup:
-    name: Containerd test setup
+    name: Containerd setup
     runs-on: ubuntu-20.04
     steps:
     - name: Get containerd
@@ -433,7 +433,8 @@ jobs:
 
     - name: Install containerd
       run: |
-        sudo apt-get install -y btrfs-progs-devel
+        $ sudo apt install btrfs-progs -y
+
         cd ../containerd
         make
 
@@ -477,8 +478,8 @@ jobs:
 
 
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
 
 #      - name: Start minikube with CRIO
 #        run: minikube start driver=none container-runtime=cri-o
