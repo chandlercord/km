@@ -433,8 +433,7 @@ jobs:
 
     - name: Install containerd
       run: |
-        $ sudo apt install btrfs-progs -y
-
+        sudo apt install btrfs-progs -y
         cd ../containerd
         make
 
