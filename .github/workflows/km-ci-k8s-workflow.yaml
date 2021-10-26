@@ -405,8 +405,8 @@ jobs:
 #          name: "CI workflow status"
 #          icon_emoji: ":thumbsdown:"
 
-  runc-setup:
-    name: Runc setup
+  testbed-setup:
+    name: testbed setup
     runs-on: ubuntu-20.04
     steps:
     - name: Get runc
@@ -421,7 +421,6 @@ jobs:
         cd ../runc
         make
 
-    - name: Containerd setup
     - name: Get containerd
       uses: actions/checkout@v1  
       with:
