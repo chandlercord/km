@@ -421,10 +421,7 @@ jobs:
         cd ../runc
         make
 
-  containerd-setup:
-    name: Containerd setup
-    runs-on: ubuntu-20.04
-    steps:
+    - name: Containerd setup
     - name: Get containerd
       uses: actions/checkout@v1  
       with:
