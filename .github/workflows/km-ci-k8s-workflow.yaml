@@ -446,7 +446,7 @@ jobs:
         cd ..
         mkdir buildDir
         cp -r containerd/bin/ buildDir
-        cp containerd/runc/runc buildDir/bin
+        cp runc/runc buildDir/bin
         cp km/demo/k8s/containerd/Dockerfile buildDir
         cp km/demo/k8s/containerd/config.toml buildDir
         cd buildDir
