@@ -432,6 +432,16 @@ jobs:
         sudo apt install libbtrfs-dev -y
         cd ../containerd
         make
+    
+    - name: Building and test a contatainerd
+      run: |
+        cd ..
+        mkdir buildDir
+        cd buildDir
+
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+
 
   minikube-test:
     name: Run k8s test on top of minikube
