@@ -441,12 +441,15 @@ jobs:
     - name: Setup tmate session1
       uses: mxschmitt/action-tmate@v3
 
-    - name: Get Dockerfile for test
+    - name: Get files for test
       run: |
         cd ..
         mkdir buildDir
+        cp -r containerd/bin/ buildDir
+        cp containerd/runc/runc buildDir/bin
+        cp km/demo/k8s/containerd/Dockerfile buildDir
+        cp km/demo/k8s/containerd/config.toml buildDir
         cd buildDir
-        cp km/demo/k8s/containerd/Dockerfile .
 
     - name: Building and test a contatainerd
       run: |
