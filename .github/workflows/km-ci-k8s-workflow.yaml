@@ -437,15 +437,16 @@ jobs:
         sudo apt install libbtrfs-dev -y
         cd ../containerd
         make
+
+    - name: Setup tmate session1
+      uses: mxschmitt/action-tmate@v3
+
     - name: Get Dockerfile for test
       run: |
         cd ..
         mkdir buildDir
         cd buildDir
         cp km/demo/k8s/containerd/Dockerfile .
-
-    - name: Setup tmate session1
-      uses: mxschmitt/action-tmate@v3
 
     - name: Building and test a contatainerd
       run: |
