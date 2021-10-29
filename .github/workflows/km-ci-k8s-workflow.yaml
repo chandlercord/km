@@ -445,17 +445,16 @@ jobs:
         cp -r containerd/bin/ buildDir
         cp runc/runc buildDir/bin
         cp km/demo/k8s/containerd/Dockerfile buildDir
-        cp km/demo/k8s/containerd/config.toml buildDir
-        cd buildDir
-
+        cp /etc/containerd/config.toml buildDir
+# just use containerd
+# move toml config to containerd
+# pull alpine, use uname to confrm
     - name: Setup tmate session1
       uses: mxschmitt/action-tmate@v3
 
     - name: Building and test a contatainerd
       run: |
         cd ../buildDir
-        docker build -t test-containerd -f Dockerfile .
-        docker run -it --rm --privileged test-containerd bash
         containerd &
         ctr image pull docker.io/library/hello-world:latest
         ctr run --snapshotter=native --tty docker.io/library/hello-world:latest demo
