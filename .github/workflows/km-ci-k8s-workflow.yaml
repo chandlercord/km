@@ -445,7 +445,7 @@ jobs:
         cp -r containerd/bin/ buildDir
         cp runc/runc buildDir/bin
         cp km/demo/k8s/containerd/Dockerfile buildDir
-        cp km/demo/k8s/containerd/config.toml /etc/containerd
+        sudo cp km/demo/k8s/containerd/config.toml /etc/containerd
 # just use containerd
 # move toml config to containerd
 # pull alpine, use uname to confrm
