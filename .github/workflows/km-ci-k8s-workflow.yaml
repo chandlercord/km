@@ -454,8 +454,7 @@ jobs:
 
     - name: Building and test a contatainerd
       run: |
-        cd ../buildDir
-        containerd &
+        sudo containerd &
         # pull alpine, use uname to confrm
         sudo ctr image pull docker.io/library/hello-world:latest
         sudo ctr run --snapshotter=native --tty docker.io/library/hello-world:latest demo
