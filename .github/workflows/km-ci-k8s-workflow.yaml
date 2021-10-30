@@ -448,9 +448,7 @@ jobs:
         sudo mkdir /etc/containerd
         sudo cp km/demo/k8s/containerd/config.toml /etc/containerd/
         export PATH=/opt/kontain/bin:$PATH
-# just use containerd
-# move toml config to containerd
-# pull alpine, use uname to confrm
+
     - name: Setup tmate session1
       uses: mxschmitt/action-tmate@v3
 
@@ -458,8 +456,9 @@ jobs:
       run: |
         cd ../buildDir
         containerd &
-        ctr image pull docker.io/library/hello-world:latest
-        ctr run --snapshotter=native --tty docker.io/library/hello-world:latest demo
+        # pull alpine, use uname to confrm
+        sudo ctr image pull docker.io/library/hello-world:latest
+        sudo ctr run --snapshotter=native --tty docker.io/library/hello-world:latest demo
 
     - name: Setup tmate session2
       uses: mxschmitt/action-tmate@v3
