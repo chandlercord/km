@@ -458,8 +458,8 @@ jobs:
         # pull alpine, use uname to confrm
         # sudo ctr image pull docker.io/library/hello-world:latest
         # sudo ctr run --snapshotter=native --tty docker.io/library/hello-world:latest demo
-        # sudo ctr image pull docker.io/library/alpine:latest
-        sudo ctr run --snapshotter=overlayfs --tty docker.io/library/alpine:latest demo uname -r
+        sudo ctr image pull docker.io/library/alpine:latest
+        sudo ctr run --snapshotter=overlayfs docker.io/library/alpine:latest demo uname -r
 
     - name: Setup tmate session2
       uses: mxschmitt/action-tmate@v3
