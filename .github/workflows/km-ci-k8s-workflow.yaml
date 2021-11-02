@@ -449,21 +449,17 @@ jobs:
         sudo cp km/demo/k8s/containerd/config.toml /etc/containerd/
         export PATH=/opt/kontain/bin:$PATH
 
-    # - name: Setup tmate session1
-    #   uses: mxschmitt/action-tmate@v3
+    - name: Containerd test prepartion - download shim artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: shim
+        path: /opt/kontain/bin/
 
     - name: Building and test a contatainerd
       run: |
         sudo containerd &
-        # pull alpine, use uname to confrm
-        # sudo ctr image pull docker.io/library/hello-world:latest
-        # sudo ctr run --snapshotter=native --tty docker.io/library/hello-world:latest demo
         sudo ctr image pull docker.io/library/alpine:latest
-        sudo ctr run --snapshotter=overlayfs docker.io/library/alpine:latest demo uname -r
-
-    - name: Setup tmate session2
-      uses: mxschmitt/action-tmate@v3
-
+        sudo ctr run --snapshotter=overlayfs --runtime=io.containerd.krun.v2 docker.io/library/alpine:latest demo uname -r
 
   minikube-test:
     name: Run k8s test on top of minikube
