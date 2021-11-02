@@ -407,6 +407,7 @@ jobs:
 
   testbed-setup:
     name: testbed setup
+    needs: ["km-build"]
     runs-on: ubuntu-20.04
     steps:
 
