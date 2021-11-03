@@ -469,7 +469,7 @@ jobs:
         sudo ctr task start demo
         uname -r
         exit
-        sudo ctr container rm -f demo
+        sudo ctr container rm demo
         echo "Remove RUNC container"
         # sudo ctr run --snapshotter=overlayfs --rm docker.io/library/alpine:latest demo uname -r
         echo "Now with KRUN"
@@ -477,7 +477,7 @@ jobs:
         sudo ctr task start demo
         uname -r
         exit
-        sudo ctr container rm -f demo
+        sudo ctr container rm demo
         # sudo ctr --debug run --snapshotter=overlayfs --runtime=io.containerd.krun.v2 --rm --privileged docker.io/library/alpine:latest demo uname -r
         echo "Done"
 
