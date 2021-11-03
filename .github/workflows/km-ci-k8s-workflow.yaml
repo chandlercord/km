@@ -453,52 +453,67 @@ jobs:
     - name: Containerd test prepartion - download shim artifact
       uses: actions/download-artifact@v2
       with:
-        name: shim
+        name: km
         path: /opt/kontain/bin/
 
     - name: Building and test a contatainerd
       run: |
-        sudo containerd &
+        sudo chmod +x /opt/kontain/bin/km /opt/kontain/bin/krun
+        sudo mkdir -p /usr/local/bin
+        sudo cp /opt/kontain/bin/shim/containerd-shim-krun-v2 /usr/local/bin/containerd-shim-krun-v2
+        sudo chmod +x /usr/local/bin/containerd-shim-krun-v2
+        sudo containerd -l trace &
         sudo ctr image pull docker.io/library/alpine:latest
-        sudo ctr run --snapshotter=overlayfs --runtime=io.containerd.krun.v2 docker.io/library/alpine:latest demo uname -r
+        echo "First with RUNC"
+        sudo ctr container create -t docker.io/library/alpine:latest demo
+        sudo ctr task uname -r
+        sudo ctr container rm -f demo
+        echo "Remove RUNC container"
+        # sudo ctr run --snapshotter=overlayfs --rm docker.io/library/alpine:latest demo uname -r
+        echo "Now with KRUN"
+        sudo ctr container create --runtime=io.containerd.krun.v2 -t docker.io/library/alpine:latest demo
+        sudo ctr task uname -r
+        sudo ctr container rm -f demo
+        # sudo ctr --debug run --snapshotter=overlayfs --runtime=io.containerd.krun.v2 --rm --privileged docker.io/library/alpine:latest demo uname -r
+        echo "Done"
 
-  minikube-test:
-    name: Run k8s test on top of minikube
-    runs-on: ubuntu-20.04
-    needs: km-build
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
+  # minikube-test:
+  #   name: Run k8s test on top of minikube
+  #   runs-on: ubuntu-20.04
+  #   needs: km-build
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         submodules: true
 
-      # KIND for k8s testing
-      # See https://github.com/engineerd/setup-kind
-      - uses: engineerd/setup-kind@v0.5.0
-        with:
-          # version 0.11.1 uses containerd://1.5.2
-          version: v0.11.1
-          image: kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6
-          # v0.10.0 uses containerd://1.4.0-106-gce4439a8
-          #version: v0.10.0
-          #image: kindest/node:v1.20.2@sha256:8f7ea6e7642c0da54f04a7ee10431549c0257315b3a634f6ef2fecaaedb19bab
-          # v0.9.0 uses  containerd://1.4.0
-          #version: v0.9.0
-          #image: kindest/node:v1.19.1@sha256:98cf5288864662e37115e362b23e4369c8c4a408f99cbc06e58ac30ddc721600
-          # c0.8.1 uses containerd://1.4.0
-          #version: v0.8.1
-          #image: kindest/node:v1.18.2@sha256:7b27a6d0f2517ff88ba444025beae41491b016bc6af573ba467b70c5e8e0d85f
+  #     # KIND for k8s testing
+  #     # See https://github.com/engineerd/setup-kind
+  #     - uses: engineerd/setup-kind@v0.5.0
+  #       with:
+  #         # version 0.11.1 uses containerd://1.5.2
+  #         version: v0.11.1
+  #         image: kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6
+  #         # v0.10.0 uses containerd://1.4.0-106-gce4439a8
+  #         #version: v0.10.0
+  #         #image: kindest/node:v1.20.2@sha256:8f7ea6e7642c0da54f04a7ee10431549c0257315b3a634f6ef2fecaaedb19bab
+  #         # v0.9.0 uses  containerd://1.4.0
+  #         #version: v0.9.0
+  #         #image: kindest/node:v1.19.1@sha256:98cf5288864662e37115e362b23e4369c8c4a408f99cbc06e58ac30ddc721600
+  #         # c0.8.1 uses containerd://1.4.0
+  #         #version: v0.8.1
+  #         #image: kindest/node:v1.18.2@sha256:7b27a6d0f2517ff88ba444025beae41491b016bc6af573ba467b70c5e8e0d85f
 
 
-      - name: Testing
-        run: |
-          uname -a
-          sudo lsmod
-          kubectl cluster-info
-          kubectl version
-          kubectl get pods -n kube-system
-          kubectl describe node
-          echo "current-context:" $(kubectl config current-context)
-          echo "environment-kubeconfig:" ${KUBECONFIG}
+  #     - name: Testing
+  #       run: |
+  #         uname -a
+  #         sudo lsmod
+  #         kubectl cluster-info
+  #         kubectl version
+  #         kubectl get pods -n kube-system
+  #         kubectl describe node
+  #         echo "current-context:" $(kubectl config current-context)
+  #         echo "environment-kubeconfig:" ${KUBECONFIG}
 
 
 
