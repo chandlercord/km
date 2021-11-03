@@ -465,14 +465,18 @@ jobs:
         sudo containerd -l trace &
         sudo ctr image pull docker.io/library/alpine:latest
         echo "First with RUNC"
-        sudo ctr container create -t docker.io/library/alpine:latest demo
-        sudo ctr task start uname -r
+        sudo ctr container create --snapshotter=overlayfs docker.io/library/alpine:latest demo
+        sudo ctr task start demo
+        uname -r
+        exit
         sudo ctr container rm -f demo
         echo "Remove RUNC container"
         # sudo ctr run --snapshotter=overlayfs --rm docker.io/library/alpine:latest demo uname -r
         echo "Now with KRUN"
         sudo ctr container create --runtime=io.containerd.krun.v2 -t docker.io/library/alpine:latest demo
-        sudo ctr task start uname -r
+        sudo ctr task start demo
+        uname -r
+        exit
         sudo ctr container rm -f demo
         # sudo ctr --debug run --snapshotter=overlayfs --runtime=io.containerd.krun.v2 --rm --privileged docker.io/library/alpine:latest demo uname -r
         echo "Done"
