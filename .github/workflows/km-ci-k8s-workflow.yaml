@@ -470,7 +470,7 @@ jobs:
         sudo ctr container rm demo
         # sudo ctr run --snapshotter=overlayfs --rm docker.io/library/alpine:latest demo uname -r
         echo "Now with KRUN"
-        sudo ctr container create --runtime=io.containerd.krun.v2 -t --privileged -- docker.io/library/alpine:latest demo uname -r
+        sudo ctr container create --runtime=io.containerd.krun.v2 --privileged -- docker.io/library/alpine:latest demo uname -r
         sudo ctr task start demo
         sudo ctr container rm demo
         # sudo ctr --debug run --snapshotter=overlayfs --runtime=io.containerd.krun.v2 --rm --privileged docker.io/library/alpine:latest demo uname -r
