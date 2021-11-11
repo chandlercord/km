@@ -456,6 +456,9 @@ jobs:
         name: km
         path: /opt/kontain/bin/
 
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+
     - name: Building and test a contatainerd
       run: |
         sudo chmod +x /opt/kontain/bin/km /opt/kontain/bin/krun
