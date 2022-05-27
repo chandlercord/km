@@ -373,6 +373,39 @@ jobs:
           make -C payloads validate-runenv-image DOCKER_INTERACTIVE=
         timeout-minutes: 20
 
+  test-boxes:
+    name: Vagrant boxes smoke test
+    runs-on: ${{ fromJSON(needs.start-runners.outputs.run-ons)['azure'] }}
+    needs: [start-runners, km-build]
+    if: ${{ github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.run_type == 'nightly') }}
+    steps:
+      - name: Get current version
+        run: |
+          TMP=$(curl -L -s https://raw.githubusercontent.com/kontainapp/km/current/km-releases/current_release.txt)
+          echo "RELEASE_TAG=${TMP#v}" >> $GITHUB_ENV
+
+      - name: Fedora box
+        run: |
+          mkdir fedora
+          cd fedora
+          vagrant init --box-version ${RELEASE_TAG} -f kontain/fedora32-kkm-beta3
+          vagrant up --provision
+          vagrant ssh -c "/opt/kontain/bin/km /opt/kontain/tests/hello_test.km some_text" | grep "argv\[1] = 'some_text'"
+          vagrant ssh -c "docker run --rm --runtime=krun kontainapp/runenv-python python -c 'import os; print(os.uname())'" | grep kontain.KKM
+          vagrant ssh -c "podman run --rm --runtime=krun kontainapp/runenv-python python -c 'import os; print(os.uname())'" | grep kontain.KKM
+          vagrant destroy -f
+      - name: Ubuntu box
+        run: |
+          mkdir ubuntu
+          cd ubuntu
+          vagrant init --box-version ${RELEASE_TAG} -f kontain/ubuntu2004-kkm-beta3
+          vagrant up --provision
+          vagrant ssh -c "/opt/kontain/bin/km /opt/kontain/tests/hello_test.km some_text" | grep "argv\[1] = 'some_text'"
+          vagrant ssh -c "docker run --rm --runtime=krun kontainapp/runenv-python python -c 'import os; print(os.uname())'" | grep kontain.KKM
+          vagrant ssh -c "podman run --rm --runtime=krun kontainapp/runenv-python python -c 'import os; print(os.uname())'" | grep kontain.KKM
+          vagrant destroy -f
+
   kkm-build:
     name: Build KKM, save test artifacts
     runs-on: ubuntu-20.04
@@ -665,6 +698,7 @@ jobs:
         krun-static-build,
         kkm-build,
         km-test,
+        test-boxes,
         kkm-test,
         kkm-test-vms,
         minikube-testing,
@@ -687,7 +721,7 @@ jobs:
   stop-runner:
     if: always()
     name: Terminate self-hosted cloud runners
-    needs: [start-runners, km-test, kkm-test-vms]
+    needs: [start-runners, km-test, test-boxes, kkm-test-vms]
     runs-on: ubuntu-latest
     steps:
       - name: Stop runners
