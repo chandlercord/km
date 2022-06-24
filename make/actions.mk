@@ -164,7 +164,7 @@ clean::
 #
 # do not generate .d file for some targets
 #
-no_deps := $(shell tmp=(${MAKEFLAGS}) && [[ "${MAKECMDGOALS}" =~ ^${NO_DEPS_TARGETS}$$ || "${tmp[0]}" =~ "n" ]] && echo -n match)
+no_deps := $(shell tmp=(${MAKEFLAGS}) && [[ "${MAKECMDGOALS}" =~ ^${NO_DEPS_TARGETS}$$ || "$${tmp[0]}" =~ "n" ]] && echo -n match)
 ifneq ($(no_deps),match)
 -include ${DEPS}
 endif
@@ -208,6 +208,6 @@ withdocker: ## Build using Docker container for build environment. 'make withdoc
 		-v ${TOP}:${DOCKER_KM_TOP}:z \
 		-w ${DOCKER_KM_TOP}/${FROMTOP} \
 		$(BUILDENV_IMG):$(BUILDENV_IMAGE_VERSION) \
-		$(MAKE) MAKEFLAGS="$(MAKEFLAGS)" $(TARGET)
+		$(MAKE) $(MAKEFLAGS) $(TARGET)
 
 .PHONY: all clean test help withdocker
