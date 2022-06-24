@@ -133,7 +133,8 @@ jobs:
         run: make withdocker TARGET=clang-format-check
 
       - name: Build KM and tests using buildenv image
-        run: make -j withdocker RUN_IN_CI=1
+        run: make -j withdocker
+        # run: make -j withdocker RUN_IN_CI=1
 
       - name: Build KM for coverage
         run: make -C km -j withdocker TARGET=coverage
